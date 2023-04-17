@@ -2,6 +2,7 @@ var squares = document.querySelectorAll(".square");
 var resetButton = document.querySelector("#reset");
 var currentPlayer = "X";
 var gameOver = false;
+var player;
 
 function checkForWin() {
     // Check rows
@@ -40,7 +41,16 @@ function endGame(winner) {
     for (var i = 0; i < squares.length; i++) {
         squares[i].removeEventListener("click", handleClick);
     }
+    // Play the victory music from YouTube
+    
+    
+    //player.loadVideoById("W9Fq1HC_5hg");
     alert(winner + " wins!");
+}
+
+function onPlayerReady(event){
+    if(gameOver)
+        player.playVideo();
 }
 
 function handleClick() {
@@ -50,6 +60,23 @@ function handleClick() {
     this.innerHTML = currentPlayer;
     if (checkForWin()) {
         endGame(currentPlayer);
+        player = new YT.Player('player', {
+            height: '0',
+            width: '0',
+            videoId: 'W9Fq1HC_5hg',
+            playerVars:{
+                autoplay:1,
+                controls:0,
+                start:100,
+                end:110,
+                iv_load_policy:3
+            },
+            /**/
+            events:{
+                onReady:onPlayerReady,
+                //onStateChange:onPlayerStateChange
+            }
+        });
     } else if (checkForTie()) {
         gameOver = true;
         alert("Tie game!");
@@ -72,3 +99,4 @@ for (var i = 0; i < squares.length; i++) {
 }
 
 resetButton.addEventListener("click", resetGame);
+
